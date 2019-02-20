@@ -24,6 +24,23 @@ android {
 
 }
 
+//添加生成成aar或者jar的Task
+task makeJar(type: Copy) {
+    //删除存在的jar
+    delete "build/lib/logsdk.jar"
+    //设置拷贝文件
+    from("build/intermediates/intermediate-jars/release")
+    //打进jar后文件目录
+    into("libs")
+    //将classes.jar放入build/libs目录下
+    //include,exclude参数来设置过滤
+    include("classes.jar")
+    //重命名为logsdk.jar
+    rename("classes.jar", "logsdk.jar")
+}
+makeJar.dependsOn(build)
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

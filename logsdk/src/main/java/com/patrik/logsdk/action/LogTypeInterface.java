@@ -2,13 +2,6 @@ package com.patrik.logsdk.action;
 
 public interface LogTypeInterface {
     /**
-     * 错误型日志,仅console打印
-     *
-     * @param logTxt
-     */
-    void logError(String logTxt);
-
-    /**
      * 普通型日志,仅console打印
      *
      * @param logTxt
@@ -23,34 +16,12 @@ public interface LogTypeInterface {
     void logWarning(String logTxt);
 
     /**
-     * 错误型日志,写入文件
-     *
-     * @param logTxt
-     */
-    void logFileError(String logTxt);
-
-    /**
-     * 普通型日志,写入文件
-     *
-     * @param logTxt
-     */
-    void logFile(String logTxt);
-
-    /**
-     * 警告型日志,写入文件
-     *
-     * @param logTxt
-     */
-    void logFileWarning(String logTxt);
-
-//    -----------------------------------------------------------
-
-    /**
      * 错误型日志,仅console打印
      *
-     * @param tr
+     * @param logTxt
      */
-    void logError(Throwable tr);
+    void logError(String logTxt);
+
 
     /**
      * 普通型日志,仅console打印
@@ -67,122 +38,161 @@ public interface LogTypeInterface {
     void logWarning(Throwable tr);
 
     /**
-     * 错误型日志,写入文件
-     *
-     * @param tr
-     */
-    void logFileError(Throwable tr);
-
-    /**
-     * 普通型日志,写入文件
-     *
-     * @param tr
-     */
-    void logFile(Throwable tr);
-
-    /**
-     * 警告型日志,写入文件
-     *
-     * @param tr
-     */
-    void logFileWarning(Throwable tr);
-
-//    -----------------------------------------------------------
-
-    /**
      * 错误型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
-     * @param logTxt
+     * @param tr
      */
-    void logError(String action, String logTxt);
+    void logError(Throwable tr);
 
     /**
      * 普通型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
+     * @param actionCode 行为码(以便查问题筛选)
      * @param logTxt
      */
-    void log(String action, String logTxt);
+    void log(String actionCode, String logTxt);
 
     /**
      * 警告型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
+     * @param actionCode 行为码(以便查问题筛选)
      * @param logTxt
      */
-    void logWarning(String action, String logTxt);
-
-    /**
-     * 错误型日志,写入文件
-     *
-     * @param action 行为码(以便查问题筛选)
-     * @param logTxt
-     */
-    void logFileError(String action, String logTxt);
-
-    /**
-     * 普通型日志,写入文件
-     *
-     * @param action 行为码(以便查问题筛选)
-     * @param logTxt
-     */
-    void logFile(String action, String logTxt);
-
-    /**
-     * 警告型日志,写入文件
-     *
-     * @param action 行为码(以便查问题筛选)
-     * @param logTxt
-     */
-    void logFileWarning(String action, String logTxt);
-//    -----------------------------------------------------------
+    void logWarning(String actionCode, String logTxt);
 
     /**
      * 错误型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
-     * @param tr
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param logTxt
      */
-    void logError(String action, Throwable tr);
+    void logError(String actionCode, String logTxt);
 
     /**
      * 普通型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
+     * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void log(String action, Throwable tr);
+    void log(String actionCode, Throwable tr);
 
     /**
      * 警告型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
+     * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void logWarning(String action, Throwable tr);
+    void logWarning(String actionCode, Throwable tr);
 
     /**
-     * 错误型日志,写入文件
+     * 错误型日志,仅console打印
      *
-     * @param action 行为码(以便查问题筛选)
+     * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void logFileError(String action, Throwable tr);
+    void logError(String actionCode, Throwable tr);
+
+//    -----------------------------------------------------------
 
     /**
      * 普通型日志,写入文件
      *
-     * @param action 行为码(以便查问题筛选)
-     * @param tr
+     * @param logTxt
+     * @return storagePath
      */
-    void logFile(String action, Throwable tr);
+    String log2File(String logTxt);
 
     /**
      * 警告型日志,写入文件
      *
-     * @param action 行为码(以便查问题筛选)
-     * @param tr
+     * @param logTxt
+     * @return storagePath
      */
-    void logFileWarning(String action, Throwable tr);
+    String logWarning2File(String logTxt);
+
+    /**
+     * 错误型日志,写入文件
+     *
+     * @param logTxt
+     * @return storagePath
+     */
+    String logError2File(String logTxt);
+
+    /**
+     * 普通型日志,写入文件
+     *
+     * @param tr
+     * @return storagePath
+     */
+    String log2File(Throwable tr);
+
+    /**
+     * 警告型日志,写入文件
+     *
+     * @param tr
+     * @return storagePath
+     */
+    String logWarning2File(Throwable tr);
+
+    /**
+     * 错误型日志,写入文件
+     *
+     * @param tr
+     * @return storagePath
+     */
+    String logError2File(Throwable tr);
+
+    /**
+     * 普通型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param logTxt
+     * @return storagePath
+     */
+    String logFile(String actionCode, String logTxt);
+
+    /**
+     * 警告型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param logTxt
+     * @return storagePath
+     */
+    String logFileWarning(String actionCode, String logTxt);
+
+    /**
+     * 错误型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param logTxt
+     * @return storagePath
+     */
+    String logFileError(String actionCode, String logTxt);
+
+    /**
+     * 普通型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param tr
+     * @return storagePath
+     */
+    String logFile(String actionCode, Throwable tr);
+
+    /**
+     * 警告型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param tr
+     * @return storagePath
+     */
+    String logFileWarning(String actionCode, Throwable tr);
+
+    /**
+     * 错误型日志,写入文件
+     *
+     * @param actionCode 行为码(以便查问题筛选)
+     * @param tr
+     * @return storagePath
+     */
+    String logFileError(String actionCode, Throwable tr);
 }

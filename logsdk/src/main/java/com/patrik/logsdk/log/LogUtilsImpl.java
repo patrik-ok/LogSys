@@ -11,7 +11,7 @@ public class LogUtilsImpl implements LogTypeInterface {
 
     private static volatile LogUtilsImpl mInstance = null;
 
-    public static LogUtilsImpl getInstance() {
+    protected static LogUtilsImpl getInstance() {
         if (mInstance == null) {
             synchronized (mInstance) {
                 if (mInstance == null) {
@@ -21,6 +21,7 @@ public class LogUtilsImpl implements LogTypeInterface {
         }
         return mInstance;
     }
+
     /**
      * 默认行为码(log tag)
      */
@@ -36,7 +37,7 @@ public class LogUtilsImpl implements LogTypeInterface {
     /**
      * 错误型日志文件夹名
      */
-    private static final String PATH_LOG_ERROR = "warning";
+    private static final String PATH_LOG_ERROR = "error";
 
     /**
      * 获取默认存储路径

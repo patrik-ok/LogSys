@@ -17,6 +17,23 @@ android {
 
     buildTypes {
         release {
+            //BuildConfig.isProduct
+            buildConfigField "boolean", "isProduct", "true"
+            //BuildConfig.DEBUG
+            debuggable false
+            //混淆
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        uat {
+            buildConfigField "boolean", "isProduct", "false"
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "boolean", "isProduct", "false"
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

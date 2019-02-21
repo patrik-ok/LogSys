@@ -18,7 +18,7 @@ public class LogMonster implements ConfigInterface {
 
     public static LogMonster getInstance() {
         if (mLogMonster == null) {
-            synchronized (mLogMonster) {
+            synchronized (LogMonster.class) {
                 if (mLogMonster == null) {
                     mLogMonster = new LogMonster();
                 }

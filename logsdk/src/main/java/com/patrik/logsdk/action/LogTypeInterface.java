@@ -149,7 +149,7 @@ public interface LogTypeInterface {
      * @param logTxt
      * @return storagePath
      */
-    String logFile(String actionCode, String logTxt);
+    String log2File(String actionCode, String logTxt);
 
     /**
      * 警告型日志,写入文件
@@ -158,7 +158,7 @@ public interface LogTypeInterface {
      * @param logTxt
      * @return storagePath
      */
-    String logFileWarning(String actionCode, String logTxt);
+    String logWarning2File(String actionCode, String logTxt);
 
     /**
      * 错误型日志,写入文件
@@ -167,7 +167,7 @@ public interface LogTypeInterface {
      * @param logTxt
      * @return storagePath
      */
-    String logFileError(String actionCode, String logTxt);
+    String logError2File(String actionCode, String logTxt);
 
     /**
      * 普通型日志,写入文件
@@ -176,7 +176,7 @@ public interface LogTypeInterface {
      * @param tr
      * @return storagePath
      */
-    String logFile(String actionCode, Throwable tr);
+    String log2File(String actionCode, Throwable tr);
 
     /**
      * 警告型日志,写入文件
@@ -185,7 +185,7 @@ public interface LogTypeInterface {
      * @param tr
      * @return storagePath
      */
-    String logFileWarning(String actionCode, Throwable tr);
+    String logWarning2File(String actionCode, Throwable tr);
 
     /**
      * 错误型日志,写入文件
@@ -194,5 +194,5 @@ public interface LogTypeInterface {
      * @param tr
      * @return storagePath
      */
-    String logFileError(String actionCode, Throwable tr);
+    String logError2File(String actionCode, Throwable tr);
 }

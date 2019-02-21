@@ -2,7 +2,6 @@ package com.patrik.logsdk.log;
 
 import android.os.Environment;
 import android.util.Log;
-
 import com.patrik.logsdk.action.LogTypeInterface;
 
 import java.io.File;
@@ -13,7 +12,7 @@ public class LogUtilsImpl implements LogTypeInterface {
 
     protected static LogUtilsImpl getInstance() {
         if (mInstance == null) {
-            synchronized (mInstance) {
+            synchronized (LogUtilsImpl.class) {
                 if (mInstance == null) {
                     mInstance = new LogUtilsImpl();
                 }
@@ -45,7 +44,12 @@ public class LogUtilsImpl implements LogTypeInterface {
      * @return
      */
 
-    private String getDiskCacheDir(String targetDirectory) {
+    private String getDiskCacheDir(String targetDirectory, String functionName) {
+        if (LogMonster.getInstance().mContext == null) {
+            String error = "mContext can not be null.Please init first before call " + functionName;
+            logError(error);
+            return "";
+        }
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {
@@ -60,7 +64,7 @@ public class LogUtilsImpl implements LogTypeInterface {
     }
 
     /**
-     * 将日志写入文件
+     * 日志写入文件
      *
      * @param actionCode
      * @param logTxt
@@ -68,9 +72,15 @@ public class LogUtilsImpl implements LogTypeInterface {
      * @return
      */
     private String write2File(String actionCode, String logTxt, String targetDirectory) {
-        String targetPath = getDiskCacheDir(targetDirectory);
-        return targetPath;
+        String realTargetPath = getDiskCacheDir(targetDirectory, "write2File(...)");
+        if ("".equals(realTargetPath)) {
+            //存储有问题，直接上传到网络
+        }
+        //开始写入文件
+
+        return realTargetPath;
     }
+
 
     @Override
     public void log(String logTxt) {
@@ -163,32 +173,32 @@ public class LogUtilsImpl implements LogTypeInterface {
     }
 
     @Override
-    public String logFile(String actionCode, String logTxt) {
+    public String log2File(String actionCode, String logTxt) {
         return write2File(actionCode, logTxt, PATH_LOG_NORMAL);
     }
 
     @Override
-    public String logFileWarning(String actionCode, String logTxt) {
+    public String logWarning2File(String actionCode, String logTxt) {
         return write2File(actionCode, logTxt, PATH_LOG_WARNING);
     }
 
     @Override
-    public String logFileError(String actionCode, String logTxt) {
+    public String logError2File(String actionCode, String logTxt) {
         return write2File(actionCode, logTxt, PATH_LOG_ERROR);
     }
 
     @Override
-    public String logFile(String actionCode, Throwable tr) {
+    public String log2File(String actionCode, Throwable tr) {
         return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
     }
 
     @Override
-    public String logFileWarning(String actionCode, Throwable tr) {
+    public String logWarning2File(String actionCode, Throwable tr) {
         return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_WARNING);
     }
 
     @Override
-    public String logFileError(String actionCode, Throwable tr) {
+    public String logError2File(String actionCode, Throwable tr) {
         return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_ERROR);
     }
 }

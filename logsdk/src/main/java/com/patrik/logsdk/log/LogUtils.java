@@ -1,179 +1,105 @@
 package com.patrik.logsdk.log;
 
-import android.os.Environment;
-import android.util.Log;
+/**
+ * 供外部调用，详情见LogUtilsImpl.java
+ */
+public class LogUtils {
 
-import com.patrik.logsdk.action.LogTypeInterface;
-
-import java.io.File;
-
-public class LogUtils implements LogTypeInterface {
-    /**
-     * 默认行为码(log tag)
-     */
-    public static final String ACTION_CODE_DEFAULT = "#com.patrik.logsdk#!==";
-    /**
-     * 普通型日志文件夹名
-     */
-    private static final String PATH_LOG_NORMAL = "normal";
-    /**
-     * 警告型日志文件夹名
-     */
-    private static final String PATH_LOG_WARNING = "warning";
-    /**
-     * 错误型日志文件夹名
-     */
-    private static final String PATH_LOG_ERROR = "warning";
-
-    /**
-     * 获取默认存储路径
-     *
-     * @return
-     */
-    private String getDiskCacheDir(String targetDirectory) {
-        String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-            cachePath = LogMonster.getInstance().mContext.getExternalCacheDir().getPath();
-        } else {
-            cachePath = LogMonster.getInstance().mContext.getCacheDir().getPath();
-        }
-        if (cachePath == null || "".equals(cachePath)) {
-            return "";
-        }
-        return cachePath + File.separator + "logsdk" + File.separator + targetDirectory;
+    public static void log(String logTxt) {
+        LogUtilsImpl.getInstance().log(logTxt);
     }
 
-    /**
-     * 将日志写入文件
-     *
-     * @param actionCode
-     * @param logTxt
-     * @param targetDirectory
-     * @return
-     */
-    private String write2File(String actionCode, String logTxt, String targetDirectory) {
-        String targetPath = getDiskCacheDir(targetDirectory);
-        return targetPath;
+    public static void logWarning(String logTxt) {
+        LogUtilsImpl.getInstance().logWarning(logTxt);
     }
 
-    @Override
-    public void log(String logTxt) {
-        Log.d(ACTION_CODE_DEFAULT, logTxt);
+
+    public static void logError(String logTxt) {
+        LogUtilsImpl.getInstance().logError(logTxt);
     }
 
-    @Override
-    public void logWarning(String logTxt) {
-        Log.w(ACTION_CODE_DEFAULT, logTxt);
+    public static void log(Throwable tr) {
+        LogUtilsImpl.getInstance().log(tr);
     }
 
-    @Override
-    public void logError(String logTxt) {
-        Log.e(ACTION_CODE_DEFAULT, logTxt);
+    public static void logWarning(Throwable tr) {
+        LogUtilsImpl.getInstance().logWarning(tr);
     }
 
-    @Override
-    public void log(Throwable tr) {
-        Log.d(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+    public static void logError(Throwable tr) {
+        LogUtilsImpl.getInstance().logError(tr);
     }
 
-    @Override
-    public void logWarning(Throwable tr) {
-        Log.w(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+
+    public static void log(String actionCode, String logTxt) {
+        LogUtilsImpl.getInstance().log(actionCode, logTxt);
     }
 
-    @Override
-    public void logError(Throwable tr) {
-        Log.e(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+    public static void logWarning(String actionCode, String logTxt) {
+        LogUtilsImpl.getInstance().logWarning(actionCode, logTxt);
     }
 
-    @Override
-    public void log(String actionCode, String logTxt) {
-        Log.d(actionCode, logTxt);
+    public static void logError(String actionCode, String logTxt) {
+        LogUtilsImpl.getInstance().logError(actionCode, logTxt);
     }
 
-    @Override
-    public void logWarning(String actionCode, String logTxt) {
-        Log.w(actionCode, logTxt);
+    public static void log(String actionCode, Throwable tr) {
+        LogUtilsImpl.getInstance().log(actionCode, tr);
     }
 
-    @Override
-    public void logError(String actionCode, String logTxt) {
-        Log.e(actionCode, logTxt);
+    public static void logWarning(String actionCode, Throwable tr) {
+        LogUtilsImpl.getInstance().logWarning(actionCode, tr);
     }
 
-    @Override
-    public void log(String actionCode, Throwable tr) {
-        Log.d(actionCode, Log.getStackTraceString(tr));
+    public static void logError(String actionCode, Throwable tr) {
+        LogUtilsImpl.getInstance().logError(actionCode, tr);
     }
 
-    @Override
-    public void logWarning(String actionCode, Throwable tr) {
-        Log.w(actionCode, Log.getStackTraceString(tr));
+    public static String log2File(String logTxt) {
+        return LogUtilsImpl.getInstance().log2File(logTxt);
     }
 
-    @Override
-    public void logError(String actionCode, Throwable tr) {
-        Log.e(actionCode, Log.getStackTraceString(tr));
+    public static String logWarning2File(String logTxt) {
+        return LogUtilsImpl.getInstance().logWarning2File(logTxt);
     }
 
-    @Override
-    public String log2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_NORMAL);
+    public static String logError2File(String logTxt) {
+        return LogUtilsImpl.getInstance().logError2File(logTxt);
     }
 
-    @Override
-    public String logWarning2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_WARNING);
+    public static String log2File(Throwable tr) {
+        return LogUtilsImpl.getInstance().log2File(tr);
     }
 
-    @Override
-    public String logError2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_ERROR);
+    public static String logWarning2File(Throwable tr) {
+        return LogUtilsImpl.getInstance().logWarning2File(tr);
     }
 
-    @Override
-    public String log2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
+    public static String logError2File(Throwable tr) {
+        return LogUtilsImpl.getInstance().logError2File(tr);
     }
 
-    @Override
-    public String logWarning2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_WARNING);
+    public static String logFile(String actionCode, String logTxt) {
+        return LogUtilsImpl.getInstance().logFile(actionCode, logTxt);
     }
 
-    @Override
-    public String logError2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_ERROR);
+    public static String logFileWarning(String actionCode, String logTxt) {
+        return LogUtilsImpl.getInstance().logFileWarning(actionCode, logTxt);
     }
 
-    @Override
-    public String logFile(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_NORMAL);
+    public static String logFileError(String actionCode, String logTxt) {
+        return LogUtilsImpl.getInstance().logFileError(actionCode, logTxt);
     }
 
-    @Override
-    public String logFileWarning(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_WARNING);
+    public static String logFile(String actionCode, Throwable tr) {
+        return LogUtilsImpl.getInstance().logFile(actionCode, tr);
     }
 
-    @Override
-    public String logFileError(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_ERROR);
+    public static String logFileWarning(String actionCode, Throwable tr) {
+        return LogUtilsImpl.getInstance().logFileWarning(actionCode, tr);
     }
 
-    @Override
-    public String logFile(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
-    }
-
-    @Override
-    public String logFileWarning(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_WARNING);
-    }
-
-    @Override
-    public String logFileError(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_ERROR);
+    public static String logFileError(String actionCode, Throwable tr) {
+        return LogUtilsImpl.getInstance().logFileError(actionCode, tr);
     }
 }

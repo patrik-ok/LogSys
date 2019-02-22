@@ -41,40 +41,32 @@ android {
 
 }
 
-//添加生成成aar或者jar的Task
-task makesdk(type: Copy) {
+def type = 'uat'
+def jarFileName = "logsdk-" + type + ".jar"
+
+task deleteOldJar() {
     //点同步按钮的时候，doLast里面不会执行.只有触发该task才会执行里面的.
     doLast {
-        String type = 'uat'
-
-//    生成jar:
-        String jarFileName = "logsdk-" + type + ".jar"
-        //删除存在的jar
+        //copyJar执行之前现删除存在的jar
         delete "../app/libs/" + jarFileName
-        //设置拷贝文件
-        from("./build/intermediates/intermediate-jars/" + type)
-        //打进jar后文件目录
-        into("../app/libs")
-        //将classes.jar放入../app/libs目录下
-        //include,exclude参数来设置过滤
-        //重命名为jarFileName
-        include("classes.jar")
-        rename("classes.jar", jarFileName)
-
-//    生成aar:
-        String aarFileName = "logsdk-" + type + ".aar"
-        //删除存在的aar
-        delete "../app/libs/" + aarFileName
-        //设置拷贝文件
-        from("./build/outputs/aar/" + aarFileName)
-        //打进aar后文件目录
-        into("../app/libs")
-        //将jarFileName 放入../app/libs目录下
-        //include,exclude参数来设置过滤
-        include(aarFileName)
     }
+
 }
-makesdk.dependsOn(build)
+
+task makeJar(type: Copy) {
+    //创建配置文件就执行以下了
+    //设置拷贝文件
+    from("./build/intermediates/intermediate-jars/" + type)
+    //将classes.jar放入../app/libs目录下
+    into("../app/libs")
+    //include,exclude参数来设置过滤
+    //重命名为jarFileName
+    include("classes.jar")
+    rename("classes.jar", jarFileName)
+}
+
+deleteOldJar.dependsOn(build)
+makeJar.dependsOn(deleteOldJar)
 
 
 dependencies {

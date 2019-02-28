@@ -4,7 +4,7 @@ import com.patrik.logsdk.BuildConfig;
 
 /**
  * 供外部调用
- * 方法名注释详见LogTypeInterface.java
+ * 方法名注释详见ILogType.java
  */
 public class LogUtils {
 

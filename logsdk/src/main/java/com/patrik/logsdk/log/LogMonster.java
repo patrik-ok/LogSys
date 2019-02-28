@@ -3,12 +3,12 @@ package com.patrik.logsdk.log;
 import android.app.Activity;
 import android.content.Context;
 
-import com.patrik.logsdk.action.ConfigInterface;
+import com.patrik.logsdk.callback.ILogConfig;
 
 /**
  * 日志系统初始化工作
  */
-public class LogMonster implements ConfigInterface {
+public class LogMonster implements ILogConfig {
     private static volatile LogMonster mLogMonster = null;
     protected Context mContext;
     /**

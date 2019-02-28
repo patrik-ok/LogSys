@@ -2,11 +2,12 @@ package com.patrik.logsdk.log;
 
 import android.os.Environment;
 import android.util.Log;
-import com.patrik.logsdk.action.LogTypeInterface;
+
+import com.patrik.logsdk.callback.ILogType;
 
 import java.io.File;
 
-public class LogUtilsImpl implements LogTypeInterface {
+public class LogUtilsImpl implements ILogType {
 
     private static volatile LogUtilsImpl mInstance = null;
 
@@ -21,10 +22,6 @@ public class LogUtilsImpl implements LogTypeInterface {
         return mInstance;
     }
 
-    /**
-     * 默认行为码(log tag)
-     */
-    public static final String ACTION_CODE_DEFAULT = "#com.patrik.logsdk#!==";
     /**
      * 普通型日志文件夹名
      */
@@ -47,8 +44,7 @@ public class LogUtilsImpl implements LogTypeInterface {
     private String getDiskCacheDir(String targetDirectory, String functionName) {
         if (LogMonster.getInstance().mContext == null) {
             String error = "mContext can not be null.Please init first before call " + functionName;
-            logError(error);
-            return "";
+            throw new NullPointerException(error);
         }
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
@@ -84,32 +80,32 @@ public class LogUtilsImpl implements LogTypeInterface {
 
     @Override
     public void log(String logTxt) {
-        Log.d(ACTION_CODE_DEFAULT, logTxt);
+        Log.d(LogConstants.ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void logWarning(String logTxt) {
-        Log.w(ACTION_CODE_DEFAULT, logTxt);
+        Log.w(LogConstants.ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void logError(String logTxt) {
-        Log.e(ACTION_CODE_DEFAULT, logTxt);
+        Log.e(LogConstants.ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void log(Throwable tr) {
-        Log.d(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.d(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
     public void logWarning(Throwable tr) {
-        Log.w(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.w(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
     public void logError(Throwable tr) {
-        Log.e(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.e(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
@@ -144,32 +140,32 @@ public class LogUtilsImpl implements LogTypeInterface {
 
     @Override
     public String log2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_NORMAL);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_NORMAL);
     }
 
     @Override
     public String logWarning2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_WARNING);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_WARNING);
     }
 
     @Override
     public String logError2File(String logTxt) {
-        return write2File(ACTION_CODE_DEFAULT, logTxt, PATH_LOG_ERROR);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_ERROR);
     }
 
     @Override
     public String log2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
     }
 
     @Override
     public String logWarning2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_WARNING);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_WARNING);
     }
 
     @Override
     public String logError2File(Throwable tr) {
-        return write2File(ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_ERROR);
+        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_ERROR);
     }
 
     @Override

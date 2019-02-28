@@ -1,8 +1,8 @@
-package com.patrik.logsdk.action;
+package com.patrik.logsdk.callback;
 
 import com.patrik.logsdk.log.LogMonster;
 
-public interface ConfigInterface {
+public interface ILogConfig {
 
     /**
      * 上传云端http地址

@@ -1,6 +1,6 @@
-package com.patrik.logsdk.action;
+package com.patrik.logsdk.callback;
 
-public interface LogTypeInterface {
+public interface ILogType {
     /**
      * 普通型日志,仅console打印
      *

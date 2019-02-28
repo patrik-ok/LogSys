@@ -11,4 +11,16 @@ public interface ILogConfig {
      * @return
      */
     LogMonster setUploadPath(String path);
+
+    String getUploadPath();
+
+    /**
+     * log本地存储路径
+     *
+     * @param path
+     * @return
+     */
+    LogMonster setLogStoragePath(String path);
+
+    String getLogStoragePath();
 }

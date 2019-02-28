@@ -1,9 +1,9 @@
 package com.patrik.logsdk.log;
-
-import android.os.Environment;
 import android.util.Log;
 
+import com.patrik.logsdk.BuildConfig;
 import com.patrik.logsdk.callback.ILogType;
+import com.patrik.logsdk.tools.FileUtils;
 
 import java.io.File;
 
@@ -23,43 +23,6 @@ public class LogUtilsImpl implements ILogType {
     }
 
     /**
-     * 普通型日志文件夹名
-     */
-    private static final String PATH_LOG_NORMAL = "normal";
-    /**
-     * 警告型日志文件夹名
-     */
-    private static final String PATH_LOG_WARNING = "warning";
-    /**
-     * 错误型日志文件夹名
-     */
-    private static final String PATH_LOG_ERROR = "error";
-
-    /**
-     * 获取默认存储路径
-     *
-     * @return
-     */
-
-    private String getDiskCacheDir(String targetDirectory, String functionName) {
-        if (LogMonster.getInstance().mContext == null) {
-            String error = "mContext can not be null.Please init first before call " + functionName;
-            throw new NullPointerException(error);
-        }
-        String cachePath;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-            cachePath = LogMonster.getInstance().mContext.getExternalCacheDir().getPath();
-        } else {
-            cachePath = LogMonster.getInstance().mContext.getCacheDir().getPath();
-        }
-        if (cachePath == null || "".equals(cachePath)) {
-            return "";
-        }
-        return cachePath + File.separator + "logsdk" + File.separator + targetDirectory;
-    }
-
-    /**
      * 日志写入文件
      *
      * @param actionCode
@@ -68,44 +31,53 @@ public class LogUtilsImpl implements ILogType {
      * @return
      */
     private String write2File(String actionCode, String logTxt, String targetDirectory) {
-        String realTargetPath = getDiskCacheDir(targetDirectory, "write2File(...)");
-        if ("".equals(realTargetPath)) {
+        String fileName = actionCode + "_" + System.currentTimeMillis() + ".txt";
+        String targetFilePath = FileUtils.getDiskCacheDir(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
+                "LogUtilsImpl.write2File(...)");
+        if (!BuildConfig.isProduct) {
+            logWarning(targetFilePath);
+        }
+        if ("".equals(targetFilePath)) {
             //存储有问题，直接上传到网络
+            String error = "获取文件路径失败/logsdk/" + targetDirectory + "/" + fileName;
+            // TODO: 2019/2/28 log2Cloud.
+            return error;
         }
         //开始写入文件
+        FileUtils.writeString(new File(targetFilePath), actionCode + "\n" + logTxt);
 
-        return realTargetPath;
+        return targetFilePath;
     }
 
 
     @Override
     public void log(String logTxt) {
-        Log.d(LogConstants.ACTION_CODE_DEFAULT, logTxt);
+        Log.d(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void logWarning(String logTxt) {
-        Log.w(LogConstants.ACTION_CODE_DEFAULT, logTxt);
+        Log.w(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void logError(String logTxt) {
-        Log.e(LogConstants.ACTION_CODE_DEFAULT, logTxt);
+        Log.e(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
     }
 
     @Override
     public void log(Throwable tr) {
-        Log.d(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.d(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
     public void logWarning(Throwable tr) {
-        Log.w(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.w(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
     public void logError(Throwable tr) {
-        Log.e(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.e(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
     }
 
     @Override
@@ -140,61 +112,61 @@ public class LogUtilsImpl implements ILogType {
 
     @Override
     public String log2File(String logTxt) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_NORMAL);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
     }
 
     @Override
     public String logWarning2File(String logTxt) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_WARNING);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
     }
 
     @Override
     public String logError2File(String logTxt) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, logTxt, PATH_LOG_ERROR);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
     }
 
     @Override
     public String log2File(Throwable tr) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
     }
 
     @Override
     public String logWarning2File(Throwable tr) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_WARNING);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
     }
 
     @Override
     public String logError2File(Throwable tr) {
-        return write2File(LogConstants.ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), PATH_LOG_ERROR);
+        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
     }
 
     @Override
     public String log2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_NORMAL);
+        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
     }
 
     @Override
     public String logWarning2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_WARNING);
+        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
     }
 
     @Override
     public String logError2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, PATH_LOG_ERROR);
+        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
     }
 
     @Override
     public String log2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_NORMAL);
+        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
     }
 
     @Override
     public String logWarning2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_WARNING);
+        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
     }
 
     @Override
     public String logError2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), PATH_LOG_ERROR);
+        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
     }
 }

@@ -10,3 +10,4 @@ https兼容
 # Finish
 1.makeJar
 2.写入文件：FileUtils，IOUtils
+3.module 设置minifyEnabled true只对aar混淆,对Jar不会混淆

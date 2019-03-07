@@ -26,7 +26,12 @@ public class FileUtils {
      * @return '.../levelDirectory/targetDirectory/fileName'
      */
 
-    public static String getDiskCacheDir(Context context, String groupDirectory, String targetDirectory, String fileName, String callerName) {
+    public static String getLogRealStoragePath(Context context, String groupDirectory, String targetDirectory, String fileName, String callerName) {
+        String cachePath = getDiskCacheDirDefault(context, callerName);
+        return cachePath + File.separator + groupDirectory + File.separator + targetDirectory + File.separator + fileName;
+    }
+
+    public static String getDiskCacheDirDefault(Context context, String callerName) {
         if (context == null) {
             String error = "mContext can not be null.Please init first before call " + callerName;
             throw new NullPointerException(error);
@@ -41,7 +46,7 @@ public class FileUtils {
         if (cachePath == null || "".equals(cachePath)) {
             return "";
         }
-        return cachePath + File.separator + groupDirectory + File.separator + targetDirectory + File.separator + fileName;
+        return cachePath;
     }
 
 

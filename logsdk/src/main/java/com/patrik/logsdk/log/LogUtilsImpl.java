@@ -32,7 +32,7 @@ public class LogUtilsImpl implements ILogType {
      */
     private String write2File(String actionCode, String logTxt, String targetDirectory) {
         String fileName = actionCode + "_" + System.currentTimeMillis() + ".txt";
-        String targetFilePath = FileUtils.getDiskCacheDir(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
+        String targetFilePath = FileUtils.getLogRealStoragePath(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
                 "LogUtilsImpl.write2File(...)");
         if (!BuildConfig.isProduct) {
             logWarning(targetFilePath);

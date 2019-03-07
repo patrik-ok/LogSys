@@ -12,8 +12,6 @@ public interface ILogConfig {
      */
     LogMonster setUploadPath(String path);
 
-    String getUploadPath();
-
     /**
      * log本地存储路径
      *
@@ -22,5 +20,4 @@ public interface ILogConfig {
      */
     LogMonster setLogStoragePath(String path);
 
-    String getLogStoragePath();
 }

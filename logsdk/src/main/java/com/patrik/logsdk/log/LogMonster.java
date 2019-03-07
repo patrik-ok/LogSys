@@ -14,11 +14,11 @@ public class LogMonster implements ILogConfig {
     /**
      * 将日志上送到云端,地址;http
      */
-    private String mUploadPath = "";
+    protected String mUploadPath = "";
     /**
      * 自设定log存储路径
      */
-    private String mLogStoragePath = "";
+    protected String mLogStoragePath = "";
 
     public static LogMonster getInstance() {
         if (mLogMonster == null) {
@@ -49,21 +49,9 @@ public class LogMonster implements ILogConfig {
         mUploadPath = uploadPath;
         return mLogMonster;
     }
-
-    @Override
-    public String getUploadPath() {
-        return mUploadPath;
-    }
-
     @Override
     public LogMonster setLogStoragePath(String path) {
         mLogStoragePath = path;
         return mLogMonster;
     }
-
-    @Override
-    public String getLogStoragePath() {
-        return mLogStoragePath;
-    }
-
 }

@@ -1,6 +1,7 @@
 package com.patrik.logsdk.log;
 
 import com.patrik.logsdk.BuildConfig;
+import com.patrik.logsdk.tools.FileUtils;
 
 /**
  * 供外部调用
@@ -139,5 +140,14 @@ public class LogUtils {
             LogUtilsImpl.getInstance().logError(actionCode, tr);
         }
         return LogUtilsImpl.getInstance().logError2File(actionCode, tr);
+    }
+
+
+    public static String getLogStoragePath() {
+        return !"".equals(LogMonster.getInstance().mLogStoragePath) ? LogMonster.getInstance().mLogStoragePath : FileUtils.getDiskCacheDirDefault(LogMonster.getInstance().mContext,"LogUtils.getLogStoragePath()");
+    }
+
+    public static String getUploadPath() {
+        return LogMonster.getInstance().mUploadPath;
     }
 }

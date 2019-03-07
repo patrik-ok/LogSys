@@ -19,5 +19,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#引入依赖包rt.jar（jdk路径）
+#-libraryjars /Applications/Android Studio 2.app/Contents/jre/jdk/Contents/Home/jre/lib/rt.jar
+
+#忽略警告
+-ignorewarnings
+#保证是独立的jar,没有任何项目引用,如果不写就会认为我们所有的代码是无用的,从而把所有的代码压缩掉,导出一个空的jar
+-dontshrink
+#保护泛型
+-keepattributes Signature
+
+-keep class com.patrik.logsdk.log.LogMonster{public *;}
 -keep class com.patrik.logsdk.log.LogUtils{public *;}
 

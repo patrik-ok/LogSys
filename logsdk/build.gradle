@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -53,7 +53,7 @@ task deleteOldAar() {
 
 }
 
-task makeaar(type: Copy) {
+task makeaar(type: Copy, dependsOn: "build") {
     //创建配置文件就执行以下了
     //设置拷贝文件
     from("./build/outputs/aar/")
@@ -64,9 +64,30 @@ task makeaar(type: Copy) {
     include("logsdk-" + aarType + ".aar")
     rename("logsdk-" + aarType + ".aar", aarFileName)
 }
-
-deleteOldAar.dependsOn(build)
 makeaar.dependsOn(deleteOldAar)
+
+//makeJar
+def jarType = 'uat'
+def originJarFile = "./build/intermediates/intermediate-jars/" + jarType + "/classes.jar"
+def targetJarFile = "../app/libs/logsdk-" + jarType + "-" + android.defaultConfig.versionName + "." + android.defaultConfig.versionCode + ".jar"
+task deleteOldJar() {
+    //点同步按钮的时候，doLast里面不会执行.只有触发该task才会执行里面的.
+    doLast {
+        //copyJar执行之前现删除存在的jar
+        delete targetJarFile
+    }
+}
+
+task makejar(type: proguard.gradle.ProGuardTask, dependsOn: "build") {
+    // 未混淆的jar路径
+    injars originJarFile
+    // 混淆后的jar输出路径
+    outjars targetJarFile
+    // 混淆协议
+    configuration './proguard-rules.pro'
+}
+makejar.dependsOn(deleteOldJar)
+
 
 
 dependencies {

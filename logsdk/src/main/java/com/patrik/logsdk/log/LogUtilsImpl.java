@@ -7,9 +7,10 @@ import com.patrik.logsdk.callback.ILogType;
 import com.patrik.logsdk.tools.FileUtils;
 
 import java.io.File;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LogUtilsImpl implements ILogType {
-
+    protected LinkedBlockingQueue<String[]> mLogLinkedBlockingQueue = new LinkedBlockingQueue(1001);
     private static volatile LogUtilsImpl mInstance = null;
 
     protected static LogUtilsImpl getInstance() {
@@ -31,7 +32,7 @@ public class LogUtilsImpl implements ILogType {
      * @param logTxt
      * @return
      */
-    private String write2File(String targetDirectory, String fileName, String logTxt) {
+    private String write2LogQueue(String targetDirectory, String fileName, String logTxt) {
         String targetFilePath = FileUtils.getLogRealStoragePath(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
                 "LogUtilsImpl.write2File(...)");
         if (!BuildConfig.isProduct) {
@@ -44,10 +45,13 @@ public class LogUtilsImpl implements ILogType {
 //        case 3:没有读写权限
 //        case 4:文件过大
         String error = "获取文件路径失败/logsdk/" + targetDirectory + "/" + fileName;
+        if (!targetFilePath.startsWith("/")) {
+
+        }
         // TODO: 2019/2/28 log2Cloud.
 
-        //开始写入文件
-        FileUtils.writeString(new File(targetFilePath), logTxt);
+        //将日志添加到队列
+        mLogLinkedBlockingQueue.add(new String[]{logTxt, targetFilePath});
 
         return targetFilePath;
     }
@@ -59,11 +63,13 @@ public class LogUtilsImpl implements ILogType {
 
     private <T> String logFormat(T logTxt) {
         StringBuilder stringBuilder = new StringBuilder();
-
-        StackTraceElement ele = (new Throwable()).getStackTrace()[2];
-        stringBuilder.append(ele.getFileName());
+        Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, Thread.currentThread().getName());
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        final int skipDepth = 2;
+        final StackTraceElement trace = elements[skipDepth];
+        stringBuilder.append(trace.getFileName());
         stringBuilder.append(":line->");
-        stringBuilder.append(ele.getLineNumber());
+        stringBuilder.append(trace.getLineNumber());
         stringBuilder.append(":\n");
 
         String tempLogTxt = "";
@@ -73,6 +79,9 @@ public class LogUtilsImpl implements ILogType {
             tempLogTxt = Log.getStackTraceString((Throwable) logTxt);
         }
         stringBuilder.append(tempLogTxt);
+        stringBuilder.append("\n<----------->\n");
+
+
         return stringBuilder.toString();
     }
 
@@ -142,61 +151,61 @@ public class LogUtilsImpl implements ILogType {
 
     @Override
     public String log2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String logWarning2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String logError2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String log2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String logWarning2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String logError2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String log2File(String actionCode, String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String logWarning2File(String actionCode, String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String logError2File(String actionCode, String logTxt) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, logTxt));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String log2File(String actionCode, Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
     public String logWarning2File(String actionCode, Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
     public String logError2File(String actionCode, Throwable tr) {
-        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, tr));
+        return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, tr));
     }
 }

@@ -3,12 +3,13 @@ package com.patrik.logsdk.log;
 import com.patrik.logsdk.BuildConfig;
 import com.patrik.logsdk.tools.FileUtils;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 /**
  * 供外部调用
  * 方法名注释详见ILogType.java
  */
 public class LogUtils {
-
     public static void log(String logTxt) {
         LogUtilsImpl.getInstance().log(logTxt);
     }
@@ -144,10 +145,14 @@ public class LogUtils {
 
 
     public static String getLogStoragePath() {
-        return !"".equals(LogMonster.getInstance().mLogStoragePath) ? LogMonster.getInstance().mLogStoragePath : FileUtils.getDiskCacheDirDefault(LogMonster.getInstance().mContext,"LogUtils.getLogStoragePath()");
+        return !"".equals(LogMonster.getInstance().mLogStoragePath) ? LogMonster.getInstance().mLogStoragePath : FileUtils.getDiskCacheDirDefault(LogMonster.getInstance().mContext, "LogUtils.getLogStoragePath()");
     }
 
     public static String getUploadPath() {
         return LogMonster.getInstance().mUploadPath;
+    }
+
+    protected static LinkedBlockingQueue getLogQueue() {
+        return LogUtilsImpl.getInstance().mLogLinkedBlockingQueue;
     }
 }

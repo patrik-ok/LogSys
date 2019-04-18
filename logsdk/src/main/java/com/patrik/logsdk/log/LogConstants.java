@@ -4,7 +4,7 @@ public class LogConstants {
     /**
      * 默认行为码(log tag)
      */
-    public static final String GLOBAL_ACTION_CODE_DEFAULT = "#com.patrik.logsdk#!==";
+    public static final String GLOBAL_LOG_TAG_DEFAULT = "#com.patrik.logsdk#!==";
     /**
      * log存储父文件夹
      */

@@ -100,7 +100,7 @@ public class FileUtils {
                     boolean e1 = true;
                     return e1;
                 } catch (IOException var16) {
-                    Log.e("", var16.getMessage().toString());
+                    LogUtils.logError2File(var16);
                     out = false;
                 } finally {
                     try {
@@ -112,7 +112,7 @@ public class FileUtils {
                             fi.close();
                         }
                     } catch (IOException var15) {
-                        var15.printStackTrace();
+                        LogUtils.logError2File(var15);
                     }
 
                 }
@@ -160,7 +160,8 @@ public class FileUtils {
             boolean e = true;
             return e;
         } catch (IOException var8) {
-            LogUtils.logError2File(var8);
+            // TODO: 2019/4/18 log2DB
+            Log.getStackTraceString(var8);
             var4 = false;
         } finally {
             IOUtils.closeQuietly(fo);

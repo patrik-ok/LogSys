@@ -1,4 +1,5 @@
 package com.patrik.logsdk.log;
+
 import android.util.Log;
 
 import com.patrik.logsdk.BuildConfig;
@@ -25,148 +26,177 @@ public class LogUtilsImpl implements ILogType {
     /**
      * 日志写入文件
      *
-     * @param actionCode
-     * @param logTxt
      * @param targetDirectory
+     * @param fileName
+     * @param logTxt
      * @return
      */
-    private String write2File(String actionCode, String logTxt, String targetDirectory) {
-        String fileName = actionCode + "_" + System.currentTimeMillis() + ".txt";
+    private String write2File(String targetDirectory, String fileName, String logTxt) {
         String targetFilePath = FileUtils.getLogRealStoragePath(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
                 "LogUtilsImpl.write2File(...)");
         if (!BuildConfig.isProduct) {
             logWarning(targetFilePath);
         }
-        if ("".equals(targetFilePath)) {
-            //存储有问题，直接上传到网络
-            String error = "获取文件路径失败/logsdk/" + targetDirectory + "/" + fileName;
-            // TODO: 2019/2/28 log2Cloud.
-            return error;
-        }
+
+        //判断是否存储有问题，是:直接上传到网络
+//        case 1:存储空间太小
+//        case 2:路径不合法
+//        case 3:没有读写权限
+//        case 4:文件过大
+        String error = "获取文件路径失败/logsdk/" + targetDirectory + "/" + fileName;
+        // TODO: 2019/2/28 log2Cloud.
+
         //开始写入文件
-        FileUtils.writeString(new File(targetFilePath), actionCode + "\n" + logTxt);
+        FileUtils.writeString(new File(targetFilePath), logTxt);
 
         return targetFilePath;
     }
 
 
+    private <T> String logFormat(String logTag, T logTxt) {
+        return logTag + logFormat(logTxt);
+    }
+
+    private <T> String logFormat(T logTxt) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        StackTraceElement ele = (new Throwable()).getStackTrace()[2];
+        stringBuilder.append(ele.getFileName());
+        stringBuilder.append(":line->");
+        stringBuilder.append(ele.getLineNumber());
+        stringBuilder.append(":\n");
+
+        String tempLogTxt = "";
+        if (logTxt instanceof String) {
+            tempLogTxt = (String) logTxt;
+        } else if (logTxt instanceof Throwable) {
+            tempLogTxt = Log.getStackTraceString((Throwable) logTxt);
+        }
+        stringBuilder.append(tempLogTxt);
+        return stringBuilder.toString();
+    }
+
+    private String getFileName(String actionCode) {
+        return actionCode + "_" + System.currentTimeMillis() + ".txt";
+    }
+
     @Override
     public void log(String logTxt) {
-        Log.d(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
+        Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
     public void logWarning(String logTxt) {
-        Log.w(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
+        Log.w(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
     public void logError(String logTxt) {
-        Log.e(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt);
+        Log.e(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
     public void log(Throwable tr) {
-        Log.d(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
     public void logWarning(Throwable tr) {
-        Log.w(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.w(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
     public void logError(Throwable tr) {
-        Log.e(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr));
+        Log.e(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
     public void log(String actionCode, String logTxt) {
-        Log.d(actionCode, logTxt);
+        Log.d(actionCode, logFormat(logTxt));
     }
 
     @Override
     public void logWarning(String actionCode, String logTxt) {
-        Log.w(actionCode, logTxt);
+        Log.w(actionCode, logFormat(logTxt));
     }
 
     @Override
     public void logError(String actionCode, String logTxt) {
-        Log.e(actionCode, logTxt);
+        Log.e(actionCode, logFormat(logTxt));
     }
 
     @Override
     public void log(String actionCode, Throwable tr) {
-        Log.d(actionCode, Log.getStackTraceString(tr));
+        Log.d(actionCode, logFormat(tr));
     }
 
     @Override
     public void logWarning(String actionCode, Throwable tr) {
-        Log.w(actionCode, Log.getStackTraceString(tr));
+        Log.w(actionCode, logFormat(tr));
     }
 
     @Override
     public void logError(String actionCode, Throwable tr) {
-        Log.e(actionCode, Log.getStackTraceString(tr));
+        Log.e(actionCode, logFormat(tr));
     }
 
     @Override
     public String log2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String logWarning2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String logError2File(String logTxt) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
     public String log2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String logWarning2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String logError2File(Throwable tr) {
-        return write2File(LogConstants.GLOBAL_ACTION_CODE_DEFAULT, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
     public String log2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String logWarning2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String logError2File(String actionCode, String logTxt) {
-        return write2File(actionCode, logTxt, LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
     public String log2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
     public String logWarning2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
     public String logError2File(String actionCode, Throwable tr) {
-        return write2File(actionCode, Log.getStackTraceString(tr), LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR);
+        return write2File(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, tr));
     }
 }

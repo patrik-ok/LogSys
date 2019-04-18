@@ -1,6 +1,5 @@
 package com.patrik.logsdk.log;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.patrik.logsdk.callback.ILogConfig;
@@ -37,11 +36,7 @@ public class LogMonster implements ILogConfig {
             mLogMonster = null;
             return;
         }
-        if (context instanceof Activity) {
-            mContext = context.getApplicationContext();
-        } else {
-            mContext = context;
-        }
+        mContext = context.getApplicationContext();
     }
 
     @Override

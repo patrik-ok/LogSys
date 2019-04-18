@@ -12,6 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class LogUtilsImpl implements ILogType {
     protected LinkedBlockingQueue<String[]> mLogLinkedBlockingQueue = new LinkedBlockingQueue(1001);
     private static volatile LogUtilsImpl mInstance = null;
+    private StackTraceElement[] mStackTraceElement = null;
 
     protected static LogUtilsImpl getInstance() {
         if (mInstance == null) {
@@ -36,7 +37,7 @@ public class LogUtilsImpl implements ILogType {
         String targetFilePath = FileUtils.getLogRealStoragePath(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,
                 "LogUtilsImpl.write2File(...)");
         if (!BuildConfig.isProduct) {
-            logWarning(targetFilePath);
+            logWarning(targetFilePath, Thread.currentThread().getStackTrace());
         }
 
         //判断是否存储有问题，是:直接上传到网络
@@ -64,12 +65,14 @@ public class LogUtilsImpl implements ILogType {
     private <T> String logFormat(T logTxt) {
         StringBuilder stringBuilder = new StringBuilder();
         Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, Thread.currentThread().getName());
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        final int skipDepth = 2;
-        final StackTraceElement trace = elements[skipDepth];
-        stringBuilder.append(trace.getFileName());
-        stringBuilder.append(":line->");
-        stringBuilder.append(trace.getLineNumber());
+        if (mStackTraceElement != null) {
+            final int skipDepth = 2;
+            final StackTraceElement trace = mStackTraceElement[skipDepth];
+            stringBuilder.append(trace.getFileName());
+            stringBuilder.append(":line->");
+            stringBuilder.append(trace.getLineNumber());
+            mStackTraceElement = null;git
+        }
         stringBuilder.append(":\n");
 
         String tempLogTxt = "";
@@ -90,122 +93,146 @@ public class LogUtilsImpl implements ILogType {
     }
 
     @Override
-    public void log(String logTxt) {
+    public void log(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
-    public void logWarning(String logTxt) {
+    public void logWarning(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.w(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
-    public void logError(String logTxt) {
+    public void logError(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.e(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(logTxt));
     }
 
     @Override
-    public void log(Throwable tr) {
+    public void log(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.d(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
-    public void logWarning(Throwable tr) {
+    public void logWarning(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.w(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
-    public void logError(Throwable tr) {
+    public void logError(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.e(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logFormat(tr));
     }
 
     @Override
-    public void log(String actionCode, String logTxt) {
+    public void log(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.d(actionCode, logFormat(logTxt));
     }
 
     @Override
-    public void logWarning(String actionCode, String logTxt) {
+    public void logWarning(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.w(actionCode, logFormat(logTxt));
     }
 
     @Override
-    public void logError(String actionCode, String logTxt) {
+    public void logError(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.e(actionCode, logFormat(logTxt));
     }
 
     @Override
-    public void log(String actionCode, Throwable tr) {
+    public void log(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.d(actionCode, logFormat(tr));
     }
 
     @Override
-    public void logWarning(String actionCode, Throwable tr) {
+    public void logWarning(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.w(actionCode, logFormat(tr));
     }
 
     @Override
-    public void logError(String actionCode, Throwable tr) {
+    public void logError(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         Log.e(actionCode, logFormat(tr));
     }
 
     @Override
-    public String log2File(String logTxt) {
+    public String log2File(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
-    public String logWarning2File(String logTxt) {
+    public String logWarning2File(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
-    public String logError2File(String logTxt) {
+    public String logError2File(String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, logTxt));
     }
 
     @Override
-    public String log2File(Throwable tr) {
+    public String log2File(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
-    public String logWarning2File(Throwable tr) {
+    public String logWarning2File(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
-    public String logError2File(Throwable tr) {
+    public String logError2File(Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(LogConstants.GLOBAL_LOG_TAG_DEFAULT), logFormat(LogConstants.GLOBAL_LOG_TAG_DEFAULT, tr));
     }
 
     @Override
-    public String log2File(String actionCode, String logTxt) {
+    public String log2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
-    public String logWarning2File(String actionCode, String logTxt) {
+    public String logWarning2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
-    public String logError2File(String actionCode, String logTxt) {
+    public String logError2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, logTxt));
     }
 
     @Override
-    public String log2File(String actionCode, Throwable tr) {
+    public String log2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_NORMAL, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
-    public String logWarning2File(String actionCode, Throwable tr) {
+    public String logWarning2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_WARNING, getFileName(actionCode), logFormat(actionCode, tr));
     }
 
     @Override
-    public String logError2File(String actionCode, Throwable tr) {
+    public String logError2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        mStackTraceElement = stackTraceElement;
         return write2LogQueue(LogConstants.GLOBAL_TARGET_DIRECTORY_ERROR, getFileName(actionCode), logFormat(actionCode, tr));
     }
 }

@@ -40,7 +40,7 @@ public class IOUtils {
                 io.close();
             }
         } catch (IOException var2) {
-            LogUtils.logError2File(var2);
+            LogUtils.logError2File(var2,Thread.currentThread().getStackTrace());
         }
 
     }

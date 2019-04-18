@@ -100,7 +100,7 @@ public class FileUtils {
                     boolean e1 = true;
                     return e1;
                 } catch (IOException var16) {
-                    LogUtils.logError2File(var16);
+                    LogUtils.logError2File(var16,Thread.currentThread().getStackTrace());
                     out = false;
                 } finally {
                     try {
@@ -112,7 +112,7 @@ public class FileUtils {
                             fi.close();
                         }
                     } catch (IOException var15) {
-                        LogUtils.logError2File(var15);
+                        LogUtils.logError2File(var15,Thread.currentThread().getStackTrace());
                     }
 
                 }
@@ -137,7 +137,7 @@ public class FileUtils {
             byte[] e = IOUtils.toBytes(fi);
             return e;
         } catch (IOException var7) {
-            LogUtils.logError2File(var7);
+            LogUtils.logError2File(var7,Thread.currentThread().getStackTrace());
             var3 = null;
         } finally {
             IOUtils.closeQuietly(fi);
@@ -179,7 +179,7 @@ public class FileUtils {
         if (content != null) {
             return writeBytes(file, content.getBytes());
         } else {
-            LogUtils.logError2File("write string is null");
+            LogUtils.logError2File("write string is null",Thread.currentThread().getStackTrace());
             return true;
         }
     }
@@ -188,7 +188,7 @@ public class FileUtils {
         try {
             return new FileInputStream(file);
         } catch (IOException var2) {
-            LogUtils.logError2File(var2);
+            LogUtils.logError2File(var2,Thread.currentThread().getStackTrace());
             return null;
         }
     }
@@ -209,7 +209,7 @@ public class FileUtils {
             boolean var5 = true;
             return var5;
         } catch (Exception var9) {
-            LogUtils.logError2File(var9);
+            LogUtils.logError2File(var9,Thread.currentThread().getStackTrace());
             read = false;
         } finally {
             IOUtils.closeQuietly(fos);

@@ -10,137 +10,137 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 方法名注释详见ILogType.java
  */
 public class LogUtils {
-    public static void log(String logTxt) {
-        LogUtilsImpl.getInstance().log(logTxt);
+    public static void log(String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().log(logTxt, stackTraceElement);
     }
 
-    public static void logWarning(String logTxt) {
-        LogUtilsImpl.getInstance().logWarning(logTxt);
+    public static void logWarning(String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logWarning(logTxt, stackTraceElement);
     }
 
-    public static void logError(String logTxt) {
-        LogUtilsImpl.getInstance().logError(logTxt);
+    public static void logError(String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logError(logTxt, stackTraceElement);
     }
 
-    public static void log(Throwable tr) {
-        LogUtilsImpl.getInstance().log(tr);
+    public static void log(Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().log(tr, stackTraceElement);
     }
 
-    public static void logWarning(Throwable tr) {
-        LogUtilsImpl.getInstance().logWarning(tr);
+    public static void logWarning(Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logWarning(tr, stackTraceElement);
     }
 
-    public static void logError(Throwable tr) {
-        LogUtilsImpl.getInstance().logError(tr);
+    public static void logError(Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logError(tr, stackTraceElement);
     }
 
 
-    public static void log(String actionCode, String logTxt) {
-        LogUtilsImpl.getInstance().log(actionCode, logTxt);
+    public static void log(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().log(actionCode, logTxt, stackTraceElement);
     }
 
-    public static void logWarning(String actionCode, String logTxt) {
-        LogUtilsImpl.getInstance().logWarning(actionCode, logTxt);
+    public static void logWarning(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logWarning(actionCode, logTxt, stackTraceElement);
     }
 
-    public static void logError(String actionCode, String logTxt) {
-        LogUtilsImpl.getInstance().logError(actionCode, logTxt);
+    public static void logError(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logError(actionCode, logTxt, stackTraceElement);
     }
 
-    public static void log(String actionCode, Throwable tr) {
-        LogUtilsImpl.getInstance().log(actionCode, tr);
+    public static void log(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().log(actionCode, tr, stackTraceElement);
     }
 
-    public static void logWarning(String actionCode, Throwable tr) {
-        LogUtilsImpl.getInstance().logWarning(actionCode, tr);
+    public static void logWarning(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logWarning(actionCode, tr, stackTraceElement);
     }
 
-    public static void logError(String actionCode, Throwable tr) {
-        LogUtilsImpl.getInstance().logError(actionCode, tr);
+    public static void logError(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
+        LogUtilsImpl.getInstance().logError(actionCode, tr, stackTraceElement);
     }
 
-    public static String log2File(String logTxt) {
+    public static String log2File(String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().log(logTxt);
+            LogUtilsImpl.getInstance().log(logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().log2File(logTxt);
+        return LogUtilsImpl.getInstance().log2File(logTxt, stackTraceElement);
     }
 
-    public static String logWarning2File(String logTxt) {
+    public static String logWarning2File(String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logWarning(logTxt);
+            LogUtilsImpl.getInstance().logWarning(logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logWarning2File(logTxt);
+        return LogUtilsImpl.getInstance().logWarning2File(logTxt, stackTraceElement);
     }
 
-    public static String logError2File(String logTxt) {
+    public static String logError2File(String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logError(logTxt);
+            LogUtilsImpl.getInstance().logError(logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logError2File(logTxt);
+        return LogUtilsImpl.getInstance().logError2File(logTxt, stackTraceElement);
     }
 
-    public static String log2File(Throwable tr) {
+    public static String log2File(Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().log(tr);
+            LogUtilsImpl.getInstance().log(tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().log2File(tr);
+        return LogUtilsImpl.getInstance().log2File(tr, stackTraceElement);
     }
 
-    public static String logWarning2File(Throwable tr) {
+    public static String logWarning2File(Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logWarning(tr);
+            LogUtilsImpl.getInstance().logWarning(tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logWarning2File(tr);
+        return LogUtilsImpl.getInstance().logWarning2File(tr, stackTraceElement);
     }
 
-    public static String logError2File(Throwable tr) {
+    public static String logError2File(Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logError(tr);
+            LogUtilsImpl.getInstance().logError(tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logError2File(tr);
+        return LogUtilsImpl.getInstance().logError2File(tr, stackTraceElement);
     }
 
-    public static String log2File(String actionCode, String logTxt) {
+    public static String log2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().log(actionCode, logTxt);
+            LogUtilsImpl.getInstance().log(actionCode, logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().log2File(actionCode, logTxt);
+        return LogUtilsImpl.getInstance().log2File(actionCode, logTxt, stackTraceElement);
     }
 
-    public static String logWarning2File(String actionCode, String logTxt) {
+    public static String logWarning2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logWarning(actionCode, logTxt);
+            LogUtilsImpl.getInstance().logWarning(actionCode, logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logWarning2File(actionCode, logTxt);
+        return LogUtilsImpl.getInstance().logWarning2File(actionCode, logTxt, stackTraceElement);
     }
 
-    public static String logError2File(String actionCode, String logTxt) {
+    public static String logError2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logError(actionCode, logTxt);
+            LogUtilsImpl.getInstance().logError(actionCode, logTxt, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logError2File(actionCode, logTxt);
+        return LogUtilsImpl.getInstance().logError2File(actionCode, logTxt, stackTraceElement);
     }
 
-    public static String log2File(String actionCode, Throwable tr) {
+    public static String log2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().log(actionCode, tr);
+            LogUtilsImpl.getInstance().log(actionCode, tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().log2File(actionCode, tr);
+        return LogUtilsImpl.getInstance().log2File(actionCode, tr, stackTraceElement);
     }
 
-    public static String logWarning2File(String actionCode, Throwable tr) {
+    public static String logWarning2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logWarning(actionCode, tr);
+            LogUtilsImpl.getInstance().logWarning(actionCode, tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logWarning2File(actionCode, tr);
+        return LogUtilsImpl.getInstance().logWarning2File(actionCode, tr, stackTraceElement);
     }
 
-    public static String logError2File(String actionCode, Throwable tr) {
+    public static String logError2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement) {
         if (!BuildConfig.isProduct) {
-            LogUtilsImpl.getInstance().logError(actionCode, tr);
+            LogUtilsImpl.getInstance().logError(actionCode, tr, stackTraceElement);
         }
-        return LogUtilsImpl.getInstance().logError2File(actionCode, tr);
+        return LogUtilsImpl.getInstance().logError2File(actionCode, tr, stackTraceElement);
     }
 
 

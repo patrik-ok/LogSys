@@ -6,21 +6,21 @@ public interface ILogType {
      *
      * @param logTxt
      */
-    void log(String logTxt);
+    void log(String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,仅console打印
      *
      * @param logTxt
      */
-    void logWarning(String logTxt);
+    void logWarning(String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,仅console打印
      *
      * @param logTxt
      */
-    void logError(String logTxt);
+    void logError(String logTxt, StackTraceElement[] stackTraceElement);
 
 
     /**
@@ -28,21 +28,21 @@ public interface ILogType {
      *
      * @param tr
      */
-    void log(Throwable tr);
+    void log(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,仅console打印
      *
      * @param tr
      */
-    void logWarning(Throwable tr);
+    void logWarning(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,仅console打印
      *
      * @param tr
      */
-    void logError(Throwable tr);
+    void logError(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 普通型日志,仅console打印
@@ -50,7 +50,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param logTxt
      */
-    void log(String actionCode, String logTxt);
+    void log(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,仅console打印
@@ -58,7 +58,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param logTxt
      */
-    void logWarning(String actionCode, String logTxt);
+    void logWarning(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,仅console打印
@@ -66,7 +66,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param logTxt
      */
-    void logError(String actionCode, String logTxt);
+    void logError(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 普通型日志,仅console打印
@@ -74,7 +74,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void log(String actionCode, Throwable tr);
+    void log(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,仅console打印
@@ -82,7 +82,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void logWarning(String actionCode, Throwable tr);
+    void logWarning(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,仅console打印
@@ -90,7 +90,7 @@ public interface ILogType {
      * @param actionCode 行为码(以便查问题筛选)
      * @param tr
      */
-    void logError(String actionCode, Throwable tr);
+    void logError(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 
 //    -----------------------------------------------------------
 
@@ -100,7 +100,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String log2File(String logTxt);
+    String log2File(String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,写入文件
@@ -108,7 +108,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String logWarning2File(String logTxt);
+    String logWarning2File(String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,写入文件
@@ -116,7 +116,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String logError2File(String logTxt);
+    String logError2File(String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 普通型日志,写入文件
@@ -124,7 +124,7 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String log2File(Throwable tr);
+    String log2File(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,写入文件
@@ -132,7 +132,7 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String logWarning2File(Throwable tr);
+    String logWarning2File(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,写入文件
@@ -140,7 +140,7 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String logError2File(Throwable tr);
+    String logError2File(Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 普通型日志,写入文件
@@ -149,7 +149,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String log2File(String actionCode, String logTxt);
+    String log2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,写入文件
@@ -158,7 +158,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String logWarning2File(String actionCode, String logTxt);
+    String logWarning2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,写入文件
@@ -167,7 +167,7 @@ public interface ILogType {
      * @param logTxt
      * @return storagePath
      */
-    String logError2File(String actionCode, String logTxt);
+    String logError2File(String actionCode, String logTxt, StackTraceElement[] stackTraceElement);
 
     /**
      * 普通型日志,写入文件
@@ -176,7 +176,7 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String log2File(String actionCode, Throwable tr);
+    String log2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 警告型日志,写入文件
@@ -185,7 +185,7 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String logWarning2File(String actionCode, Throwable tr);
+    String logWarning2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 
     /**
      * 错误型日志,写入文件
@@ -194,5 +194,5 @@ public interface ILogType {
      * @param tr
      * @return storagePath
      */
-    String logError2File(String actionCode, Throwable tr);
+    String logError2File(String actionCode, Throwable tr, StackTraceElement[] stackTraceElement);
 }

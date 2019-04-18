@@ -37,7 +37,7 @@ public class LogMonster implements ILogConfig {
     public void init(Context context) {
         if (context == null) {
             // TODO: 2019/2/20 add log;
-            LogUtils.logWarning("context is null,日志写入文件的工作将无法进行");
+            LogUtils.logWarning("context is null,日志写入文件的工作将无法进行", Thread.currentThread().getStackTrace());
             mLogMonster = null;
             return;
         }
@@ -49,7 +49,7 @@ public class LogMonster implements ILogConfig {
                     while (true) {
                         try {
                             if (LogUtils.getLogQueue() == null) {
-                                LogUtils.log("logQueue 为null，鼾睡15秒");
+                                LogUtils.log("logQueue 为null，鼾睡15秒", Thread.currentThread().getStackTrace());
                                 Thread.sleep(15000L);
                             } else {
                                 String[] logInfo = (String[]) LogUtils.getLogQueue().poll(30L, TimeUnit.MINUTES);
@@ -61,7 +61,7 @@ public class LogMonster implements ILogConfig {
                                 }
                             }
                         } catch (Exception var1) {
-                            LogUtils.logError2File(var1);
+                            LogUtils.logError2File(var1, Thread.currentThread().getStackTrace());
                         }
                     }
                 }

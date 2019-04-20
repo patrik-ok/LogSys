@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class LogUtilsImpl implements ILogType {
-    protected LinkedBlockingQueue<String[]> mLogLinkedBlockingQueue = new LinkedBlockingQueue(1001);
+    protected LinkedBlockingQueue<String[]> mLogLinkedBlockingQueue = new LinkedBlockingQueue<>(1001);
     private static volatile LogUtilsImpl mInstance = null;
 
     protected static LogUtilsImpl getInstance() {
@@ -27,10 +27,10 @@ public class LogUtilsImpl implements ILogType {
     /**
      * 日志写入文件
      *
-     * @param targetDirectory
-     * @param fileName
-     * @param logTxt
-     * @return
+     * @param targetDirectory 目标文件夹
+     * @param fileName        文件名 a.txt
+     * @param logTxt          logContent
+     * @return targetFilePath
      */
     private String write2LogQueue(String targetDirectory, String fileName, String logTxt) {
         String targetFilePath = FileUtils.getLogRealStoragePath(LogMonster.getInstance().mContext, LogConstants.GLOBAL_GROUP_DIRECTORY_DEFAULT, targetDirectory, fileName,

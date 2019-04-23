@@ -6,6 +6,8 @@ import com.patrik.logsdk.callback.ILogConfig;
 import com.patrik.logsdk.tools.FileUtils;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class LogMonster implements ILogConfig {
     private static volatile LogMonster mLogMonster = null;
+    private ExecutorService mLogExecutorService = null;
     protected Context mContext;
     /**
      * 将日志上送到云端,地址;http
@@ -42,7 +45,10 @@ public class LogMonster implements ILogConfig {
             return;
         }
         mContext = context.getApplicationContext();
-        Thread logThread = new Thread(new Runnable() {
+        if (mLogExecutorService == null) {
+            mLogExecutorService = Executors.newFixedThreadPool(50);
+        }
+        mLogExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -52,14 +58,20 @@ public class LogMonster implements ILogConfig {
                             LogUtils.log("logQueue 为null，鼾睡15秒");
                             Thread.sleep(15000L);
                         } else {
-                            String[] logInfo = (String[]) LogUtils.getLogQueue().poll(30L, TimeUnit.MINUTES);
-                            LogUtils.log("log准备写入文件");
+                            LogUtils.log("log正在监听...");
+                            final String[] logInfo = (String[]) LogUtils.getLogQueue().poll(30L, TimeUnit.MINUTES);
+                            LogUtils.log("log准备写入文件...");
                             if (logInfo != null && logInfo.length >= 2) {
-                                String logTxt = logInfo[0];
-                                String finalFilePath = logInfo[1];
-                                LogUtils.log("log正在写入文件...");
+                                mLogExecutorService.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String logTxt = logInfo[0];
+                                        String finalFilePath = logInfo[1];
+                                        LogUtils.log("log正在写入文件...");
 //                                    log开始写入文件
-                                FileUtils.writeString(new File(finalFilePath), logTxt);
+                                        FileUtils.writeString(new File(finalFilePath), logTxt);
+                                    }
+                                });
                             }
                         }
                     } catch (Exception var1) {
@@ -67,8 +79,17 @@ public class LogMonster implements ILogConfig {
                     }
                 }
             }
-        }, "LogWrite2FileThread");
-        logThread.start();
+        });
+    }
+
+
+    public void shutdown() {
+        if (mLogExecutorService != null) {
+            mLogExecutorService.shutdownNow();
+        }
+        if (mLogMonster != null) {
+            mLogMonster = null;
+        }
     }
 
     @Override

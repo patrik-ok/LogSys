@@ -33,6 +33,8 @@
 
 -keep class com.patrik.logsdk.log.LogMonster{public *;}
 -keep class com.patrik.logsdk.log.LogUtils{public *;}
+-keep class com.patrik.logsdk.log.crashcatch.CatcherExceptionTrace{public *;}
+-keep interface com.patrik.logsdk.log.crashcatch.OnCatcherExceptionTraceListener{public *;}
 #参考：https://blog.51cto.com/2632450/1582863
 -keep class com.patrik.logsdk.log.**$* {
     public <methods>;

@@ -8,6 +8,7 @@ import com.patrik.logsdk.tools.FileUtils;
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,26 +54,22 @@ public class LogMonster implements ILogConfig {
             public void run() {
                 while (true) {
                     try {
-                        Thread.sleep(1);
-                        if (LogUtils.getLogQueue() == null) {
-                            LogUtils.log("logQueue 为null，鼾睡15秒");
-                            Thread.sleep(15000L);
-                        } else {
-                            LogUtils.log("log正在监听...");
-                            final String[] logInfo = (String[]) LogUtils.getLogQueue().poll(30L, TimeUnit.MINUTES);
-                            LogUtils.log("log准备写入文件...");
-                            if (logInfo != null && logInfo.length >= 2) {
-                                mLogExecutorService.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String logTxt = logInfo[0];
-                                        String finalFilePath = logInfo[1];
-                                        LogUtils.log("log正在写入文件...");
+                        LogUtils.log("log正在监听...");
+                        //https://www.jianshu.com/p/89c3031eb117
+                        LogUtils.getSemaphore().acquire();
+                        final String[] logInfo = (String[]) LogUtils.getLogQueue().poll(30L, TimeUnit.MINUTES);
+                        LogUtils.log("log准备写入文件...");
+                        if (logInfo != null && logInfo.length >= 2) {
+                            mLogExecutorService.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String finalFilePath = logInfo[0];
+                                    String logTxt = logInfo[1];
+                                    LogUtils.log("log正在写入文件...");
 //                                    log开始写入文件
-                                        FileUtils.writeString(new File(finalFilePath), logTxt);
-                                    }
-                                });
-                            }
+                                    FileUtils.writeString(new File(finalFilePath), logTxt);
+                                }
+                            });
                         }
                     } catch (Exception var1) {
                         LogUtils.logError2File(var1);

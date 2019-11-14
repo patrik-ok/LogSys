@@ -4,6 +4,7 @@ import com.patrik.logsdk.BuildConfig;
 import com.patrik.logsdk.tools.FileUtils;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 /**
  * 供外部调用
@@ -155,4 +156,9 @@ public class LogUtils {
     protected static LinkedBlockingQueue getLogQueue() {
         return LogUtilsImpl.getInstance().mLogLinkedBlockingQueue;
     }
+
+    protected static Semaphore getSemaphore() {
+        return LogUtilsImpl.getInstance().mSemaphore;
+    }
+
 }

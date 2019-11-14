@@ -8,8 +8,10 @@ import com.patrik.logsdk.tools.FileUtils;
 
 import java.io.File;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 public class LogUtilsImpl implements ILogType {
+    protected Semaphore mSemaphore = new Semaphore(0);
     protected LinkedBlockingQueue<String[]> mLogLinkedBlockingQueue = new LinkedBlockingQueue<>(1001);
     private static volatile LogUtilsImpl mInstance = null;
 
@@ -52,8 +54,8 @@ public class LogUtilsImpl implements ILogType {
 
         //将日志添加到队列
         // TODO: 2019/4/19 logPrimaryKey
-        mLogLinkedBlockingQueue.add(new String[]{logTxt, targetFilePath});
-
+        mLogLinkedBlockingQueue.add(new String[]{targetFilePath, logTxt});
+        mSemaphore.release();
         return targetFilePath;
     }
 
